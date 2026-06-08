@@ -1,155 +1,64 @@
 #include<iostream>
-#define MAX 300
 using namespace std;
 
-//berikan struct
-struct Pasien{
-	int nomor;
-	string nama;
-	
-};
+//inisiasi variable yang di gunakan
+#define MAX 5
+int queue_arr[MAX];
+int front = -1;
+int rear = -1;
 
-//deklarasi variable
-struct AntrianPasien{
-	Pasien data[MAX];
-	int front, rear;
-	int autoNomor;
-	
-	//taro front,rear,nomor antrian
-	AntrianPasien(){
-		front=0;
-		rear=-1;
-		autoNomor=0;
+//fungsi cek kosong
+bool isEmpty(){
+	return front == -1||front>rear;
+}
+
+//fungsi cek penuh
+bool isFull(){
+	return rear == MAX-1;
+}
+
+//fungsi tambah queue
+void enqueue(int data){
+	if( isFull()){
+		cout<<"Queue penuh!!.\n";
 	}
-	
-	//cek penuh
-	bool isFull(){
-		return rear == MAX-1;
-	}
-	
-	//cek kosong
-	bool isEmpty(){
-		return front>rear;
-	}
-	
-	//fungsi tambah queue
-	void enqueue(string nama){
-		if (isFull()){
-			cout<<"Antrian Penuh ! Tidak bisa menambah pasien lagi.\n";
-			return;
-		}
-		autoNomor++;
+	else {
+		if (isEmpty()) front = 0;
 		rear++;
-		data[rear].nomor = autoNomor;
-		data[rear].nama = nama;
-		cout<<"Pasien "<<nama<<" (No. "<<autoNomor<<" ) berhasil ditambahkan ke antrian. \n";
+		queue_arr[rear] = data;
+		cout<<data<<" Berhasil ditambahkan.\n";
 	}
-	
-	//fungsi kurang
-	void dequeue(){
-		if(isEmpty()){
-			cout<<"Antrian kosong ! Tidak ada pasien yang dilayani.\n";
-			return;
-		}
-		cout<<"Melayani Pasien : "<<data[front].nama << "(No. "<<data[front].nomor<<" )\n";
-		front++;
-		
-	}
-	
-	//fungsi lihat head/awal
-	void peekFront() {
-		if (isEmpty()) {
-			cout<< " Antrian kosong!\n";
-			return;
-		}
-		cout<<"Pasien selanjutnya : "<<data[front].nama<<"(No. "<<data[front].nomor<<")\n";
-	}
-	
-	//fungsi lihat tail/akhir / cek kosong
-	void peekBack() {
-		if (isEmpty()) {
-			cout<< " Antrian kosong!\n";
-			return;
-		}
-		cout<<"Pasien terakhir : "<<data[rear].nama<<"(No. "<<data[rear].nomor<<")\n";
-	}
-	
-	//tampilan queue
-	void display(){
-		if(isEmpty()){
-			cout<<"Antrian kosong!\n";
-			return;
-		}
-		cout<<"Daftar pasien dalam antrian :\n";
-		
-		for(int i = front; i<=rear; i++){
-			cout<<data[i].nomor<<". "<<data[i].nama<<endl;
-		}
-	}
-	
-	//oprasi cek jumlah antrian
-	void jumlahAntrian(){
-		cout<<"Jumlah pasien dalam antrian : "<<(rear-front+1)<<endl;
-	}
-};
+}
 
-//codingan utama
-int main(){
-	AntrianPasien antrian;
-	int pilihan;
-	string nama;
-	
-	
-	//menu
-	do{
-		cout<<"\n=== Menu Antrian Pasien ===\n";
-		cout<<" 1.Tambah Pasien\n";
-		cout<<" 2.Layani Pasien\n";
-		cout<<" 3.Lihat Pasien selanjutnya\n";
-		cout<<" 4.Lihat Pasien Terakhir\n";
-		cout<<" 5.Lihat Semua Pasien\n";
-		cout<<" 6.Lihat jumlah \n";
-		cout<<" 7.Keluar\n";
-		cout<<"Pilihan anda :";
-		cin>>pilihan;
-		cin.ignore();
-		
-		
-		//pilihan
-		switch(pilihan){
-			case 1:
-			cout<<"Masukan nama pasien : ";
-			getline(cin,nama);
-			antrian.enqueue(nama);
-			break;
-			
-			case 2:
-			antrian.dequeue();
-			break;
-			
-			case 3:
-			antrian.peekFront();
-			break;
-			
-			case 4:
-			antrian.peekBack();
-			break;
-			
-			case 5:
-			antrian.display();
-			break;
-			
-			case 6:
-			antrian.jumlahAntrian();
-			break;
-			
-			case 7:
-			cout<<"Program selesai.\n";
-			break;
-			default:
-				cout<<"Pilihan tidak valid!\n";
-		}
+//fungsi kurang queue
+void dequeue(){
+	if (isEmpty()){
+		cout<<"Queue kosong!!.\n";
 	}
-	while ( pilihan !=7);
-	return 0;
+	else {
+		cout<<queue_arr[front]<<" berhasil di dequeue\n";
+		front++;
+	}
+}
+
+//fungsi tampilkan queue
+void display(){
+		if (isEmpty()){
+		cout<<"Queue kosong!!.\n";
+	} else {
+		cout<<"Isi QUEUE (front ke rear)\n";
+		for (int i = front; i <= rear; i++){
+			cout<<"# "<<queue_arr[i]<<endl;
+		}
+		cout<<"----------------------------\n";
+	}
+}
+
+//fungsi utama
+int main(){
+	enqueue(12);
+	enqueue(10);
+	enqueue(1);
+	dequeue();
+	display();
 }
